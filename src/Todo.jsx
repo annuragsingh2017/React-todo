@@ -4,33 +4,48 @@ import "./todo.css";
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState("");
-  const [discription, setDescription] = useState("");
+  const [description, setDescription] = useState("");
   const [dropDown, setDropDown] = useState("high");
   const [editableMode, setEditableMode] = useState(false);
   const [editedData, setEditedData] = useState({});
-  const [SelectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+  const [taskError, setTaskError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+
   const handleAllChecked = (e) => {
-    setSelectAll(!SelectAll);
+    setSelectAll(!selectAll);
     setTodos(
-      todos?.map((data) => {
-        return {
-          ...data,
-          isSelected: e.target.checked,
-        };
-      })
+      todos.map((data) => ({
+        ...data,
+        isSelected: e.target.checked,
+      }))
     );
   };
+
   useEffect(() => {
-    if (todos?.length > 0 && todos?.every((val) => val.isSelected === true)) {
+    if (todos.length > 0 && todos.every((val) => val.isSelected === true)) {
       setSelectAll(true);
     }
-  }, [SelectAll, todos]);
+  }, [selectAll, todos]);
 
   const handleSubmit = () => {
-    if (task.trim() === "" || discription.trim() === "") return;
+    if (task.trim() === "" && description.trim() === "") {
+      setDescriptionError("Task and Description cannot be empty");
+      return;
+    }
+    if (task.trim() === "") {
+      setTaskError("Task cannot be empty");
+      return;
+    }
+    if (description.trim() === "") {
+      setDescriptionError("Description cannot be empty");
+      return;
+    }
+    setTaskError("");
+    setDescriptionError("");
     setTodos([
       ...todos,
-      { task, discription, isSelected: false, dropDown, id: Date.now() },
+      { task, description, isSelected: false, dropDown, id: Date.now() },
     ]);
     setTask("");
     setDescription("");
@@ -43,7 +58,7 @@ const Todo = () => {
     setEditableMode(!editableMode);
     setEditedData(todo);
     setTask(todo.task);
-    setDescription(todo.discription);
+    setDescription(todo.description);
     setDropDown(todo.dropDown);
   };
   const handleUpdate = () => {
@@ -54,7 +69,7 @@ const Todo = () => {
             return {
               ...data,
               task,
-              discription,
+              description,
               dropDown,
             };
           }
@@ -92,14 +107,22 @@ const Todo = () => {
       <h2>TODO</h2>
       <input
         placeholder="Add Task"
-        onChange={(e) => setTask(e.target.value)}
+        onChange={(e) => {
+          setTask(e.target.value);
+          setTaskError("");
+        }}
         value={task}
       />
+      {taskError && <p className="error">{taskError}</p>}
       <input
         placeholder="Add Task Description"
-        onChange={(e) => setDescription(e.target.value)}
-        value={discription}
+        onChange={(e) => {
+          setDescription(e.target.value);
+          setDescriptionError("");
+        }}
+        value={description}
       />
+      {descriptionError && <p className="error">{descriptionError}</p>}
 
       <label>Priority</label>
       <select
@@ -123,13 +146,13 @@ const Todo = () => {
             {" "}
             <input
               type="checkbox"
-              checked={SelectAll}
+              checked={selectAll}
               onChange={(e) => handleAllChecked(e)}
             />
           </th>
           <th>Task</th>
-          <th>Discription</th>
-          <th>priority</th>
+          <th>Description</th>
+          <th>Priority</th>
           <th>Actions</th>
         </tr>
 
@@ -145,7 +168,7 @@ const Todo = () => {
             </td>
             <td className={todo.isSelected && "completed"}>{todo.task}</td>
             <td className={todo.isSelected && "completed"}>
-              {todo.discription}
+              {todo.description}
             </td>
             <td className={todo.isSelected && "completed"}>{todo.dropDown}</td>
             <button onClick={() => handleEdit(todo)} disabled={todo.isSelected}>

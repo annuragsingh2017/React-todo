@@ -84,3 +84,10 @@ background-color: #ccc;
     text-decoration: line-through;
     color: #ccc;
 }
+.todo .error {
+    text-align: justify;
+    color: red;
+    font-size: 14px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
