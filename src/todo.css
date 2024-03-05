@@ -1,0 +1,86 @@
+.todo {
+    background-color: #fff;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: sans-serif;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.todo h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.todo input,
+.todo select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.todo input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.todo label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.todo button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.todo button:hover {
+    background-color: #0069d9;
+}
+.todo label {
+    display: block;
+    /* Keep inline block for proper alignment with inputs */
+    margin-bottom: 5px;
+    font-weight: bold;
+    /* Add some emphasis to the label text */
+}
+.todo button:disabled{
+background-color: #ccc;
+    /* Lighten background color */
+    color: #aaa;
+    /* Gray out text color */
+    cursor: not-allowed;
+    /* Change cursor to indicate disabled state */
+    opacity: 0.5;
+}
+
+.todo table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.todo th,
+.todo td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.todo th {
+    background-color: #eee;
+}
+
+.todo .completed {
+    text-decoration: line-through;
+    color: #ccc;
+}

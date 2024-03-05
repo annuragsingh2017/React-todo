@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./todo.css";
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
@@ -87,7 +88,7 @@ const Todo = () => {
   };
 
   return (
-    <div>
+    <div className="todo">
       <h2>TODO</h2>
       <input
         placeholder="Add Task"
@@ -100,7 +101,7 @@ const Todo = () => {
         value={discription}
       />
 
-      <label>priority</label>
+      <label>Priority</label>
       <select
         value={dropDown}
         onChange={(e) => {
@@ -129,7 +130,7 @@ const Todo = () => {
           <th>Task</th>
           <th>Discription</th>
           <th>priority</th>
-          <th>Action</th>
+          <th>Actions</th>
         </tr>
 
         {todos?.map((todo) => (
@@ -142,12 +143,14 @@ const Todo = () => {
                 onChange={(e) => handleCheckbox(todo, e)}
               />
             </td>
-            <td style={{ textDecoration: todo.isSelected && "line-through" }}>
-              {todo.task}
+            <td className={todo.isSelected && "completed"}>{todo.task}</td>
+            <td className={todo.isSelected && "completed"}>
+              {todo.discription}
             </td>
-            <td>{todo.discription}</td>
-            <td>{todo.dropDown}</td>
-            <button onClick={() => handleEdit(todo)}>Edit</button>
+            <td className={todo.isSelected && "completed"}>{todo.dropDown}</td>
+            <button onClick={() => handleEdit(todo)} disabled={todo.isSelected}>
+              Edit
+            </button>
             <button onClick={() => handleDelete(todo.id)}>delete</button>
           </tr>
         ))}
