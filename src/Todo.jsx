@@ -11,6 +11,12 @@ const Todo = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [taskError, setTaskError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  let itemsPerPage = 2;
+  const totalPages = Math.ceil(todos?.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  console.log(totalPages);
 
   const handleAllChecked = (e) => {
     setSelectAll(!selectAll);
@@ -101,7 +107,25 @@ const Todo = () => {
     setSelectAll(false);
     setTodos(todos?.filter((item) => !item.isSelected));
   };
+  const handleClick = (page) => {
+    setCurrentPage(page);
+  };
 
+  const renderPagination = () => {
+    const pagination = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pagination.push(
+        <button
+          key={i}
+          onClick={() => handleClick(i)}
+          className={currentPage === i ? "active" : ""}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pagination;
+  };
   return (
     <div className="todo">
       <h2>TODO</h2>
@@ -135,11 +159,15 @@ const Todo = () => {
         <option value="medium"> medium</option>
         <option value="low"> low</option>
       </select>
-
-      <button onClick={editableMode ? handleUpdate : handleSubmit}>
-        {editableMode ? "update" : "Add"} Task
-      </button>
-      <button onClick={() => handleRemoveCompleted()}> Remove Completed</button>
+      <div className="buttons">
+        <button onClick={editableMode ? handleUpdate : handleSubmit}>
+          {editableMode ? "update" : "Add"} Task
+        </button>
+        <button onClick={() => handleRemoveCompleted()}>
+          {" "}
+          Remove Completed
+        </button>
+      </div>
       <table>
         <tr>
           <th>
@@ -156,7 +184,7 @@ const Todo = () => {
           <th>Actions</th>
         </tr>
 
-        {todos?.map((todo) => (
+        {todos?.slice(startIndex, endIndex)?.map((todo) => (
           <tr key={todo.id}>
             <td>
               <input
@@ -178,6 +206,27 @@ const Todo = () => {
           </tr>
         ))}
       </table>
+      <div className="pagination buttons">
+        <button
+          onClick={() =>
+            setCurrentPage(currentPage === 1 ? currentPage : currentPage - 1)
+          }
+          disabled={currentPage === 1}
+        >
+          prev
+        </button>
+        {renderPagination()}
+        <button
+          onClick={() =>
+            setCurrentPage(
+              currentPage === totalPages ? totalPages : currentPage + 1
+            )
+          }
+          disabled={currentPage === totalPages || totalPages === 0}
+        >
+          next
+        </button>
+      </div>
     </div>
   );
 };
