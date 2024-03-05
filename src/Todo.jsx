@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
@@ -19,6 +19,12 @@ const Todo = () => {
       })
     );
   };
+  useEffect(() => {
+    if (todos?.length > 0 && todos?.every((val) => val.isSelected === true)) {
+      setSelectAll(true);
+    }
+  }, [SelectAll, todos]);
+
   const handleSubmit = () => {
     if (task.trim() === "" || discription.trim() === "") return;
     setTodos([
@@ -62,6 +68,7 @@ const Todo = () => {
     setDropDown("high");
   };
   const handleCheckbox = (todo, e) => {
+    setSelectAll(false);
     setTodos(
       todos?.map((data) => {
         if (data.id === todo.id) {
@@ -75,6 +82,7 @@ const Todo = () => {
     );
   };
   const handleRemoveCompleted = () => {
+    setSelectAll(false);
     setTodos(todos?.filter((item) => !item.isSelected));
   };
 
