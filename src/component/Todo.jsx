@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './todo.css';
 import { renderPagination } from './pagination';
 import RenderTodo from './pages';
@@ -15,6 +15,8 @@ const Todo = () => {
 	const [taskError, setTaskError] = useState('');
 	const [descriptionError, setDescriptionError] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
+	const [searchData, setSearchData] = useState('');
+	const [filteredTodos, setFilteredTodos] = useState([]);
 	let itemsPerPage = 4;
 	const totalPages = Math.ceil(todos?.length / itemsPerPage);
 	const startIndex = (currentPage - 1) * itemsPerPage;
@@ -47,7 +49,7 @@ const Todo = () => {
 	const handleAllChecked = (e) => {
 		setSelectAll(!selectAll);
 		setTodos(
-			todos.map((data) => ({
+			todos?.map((data) => ({
 				...data,
 				isSelected: e.target.checked,
 			}))
@@ -56,6 +58,13 @@ const Todo = () => {
 	const handleClick = (page) => {
 		setCurrentPage(page);
 	};
+
+	useEffect(() => {
+		const newTodos = [...todos];
+		setFilteredTodos(
+			newTodos.filter((todo) => todo?.task?.toLowerCase().includes(searchData.toLowerCase()))
+		);
+	}, [searchData, todos]);
 
 	return (
 		<div className="todo">
@@ -78,6 +87,8 @@ const Todo = () => {
 					setEditableMode,
 					setEditedData,
 					setSelectAll,
+					searchData,
+					setSearchData,
 				}}
 			/>
 
@@ -93,7 +104,7 @@ const Todo = () => {
 					<th>Actions</th>
 				</tr>
 
-				{todos?.slice(startIndex, endIndex)?.map((todo) => (
+				{filteredTodos?.slice(startIndex, endIndex)?.map((todo) => (
 					<RenderTodo
 						todo={todo}
 						handleCheckbox={handleCheckbox}

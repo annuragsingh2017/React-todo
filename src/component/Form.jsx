@@ -19,6 +19,8 @@ const Form = ({
 		setEditableMode,
 		setEditedData,
 		setSelectAll,
+		searchData,
+		setSearchData,
 	},
 }) => {
 	const handleUpdate = () => {
@@ -74,6 +76,10 @@ const Form = ({
 		setDescription('');
 		setDropDown('high');
 	};
+
+	const handleSearch = (e) => {
+		setSearchData(e.target.value);
+	};
 	return (
 		<>
 			<h2>TODO</h2>
@@ -97,18 +103,25 @@ const Form = ({
 				value={description}
 			/>
 			{descriptionError && <p className="error">{descriptionError}</p>}
-
-			<label>Priority</label>
-			<select
-				value={dropDown}
-				onChange={(e) => {
-					setDropDown(e.target.value);
-				}}
-			>
-				<option value="high">high</option>
-				<option value="medium"> medium</option>
-				<option value="low"> low</option>
-			</select>
+			<div className="search-bar">
+				<div>
+					<label>Priority</label>
+					<select
+						value={dropDown}
+						onChange={(e) => {
+							setDropDown(e.target.value);
+						}}
+					>
+						<option value="high">high</option>
+						<option value="medium"> medium</option>
+						<option value="low"> low</option>
+					</select>
+				</div>
+				<div>
+					<label> Find with task name</label>
+					<input placeholder="Search..." value={searchData} onChange={handleSearch} />
+				</div>
+			</div>
 			<div className="buttons">
 				<button onClick={editableMode ? handleUpdate : handleSubmit}>
 					{editableMode ? 'update' : 'Add'} Task

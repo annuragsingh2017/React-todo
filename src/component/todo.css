@@ -122,3 +122,7 @@ background-color: #ccc;
     width: 100%;
     text-align: center;
 }
+.todo .search-bar{
+    display: flex;
+    justify-content: space-around;
+}
